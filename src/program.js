@@ -2,19 +2,33 @@ let chalk = require('chalk');
 let _ = require('lodash');
 let checkpointsService = require('./staticCheckpoints');
 
+let conditionMesure = distance => {
+  const metre = "m"; // m for distances greater or equal than 1
+  const centimetre = "cm"; // otherwise add "cm" and multiply by 100.
+  var DistanceCalcul;
+  if(distance > 1) {
+    DistanceCalcul = distance + metre
+  }else{
+    DistanceCalcul = (distance * 100) + centimetre;
+  }
+
+  return DistanceCalcul;
+}
 
 let calculateDistanceWithRssi = rssi => {
+
+  // Definition des unités de mesure
   var txPower = -59; // hard coded power value. Usually ranges between -59 to -65
-  if (rssi == 0) {
+
+  if (rssi == 0 || !rssi) {
     return -1.0;
   }
   var ratio = rssi * 1.0 / txPower;
-  if (ratio < 1.0) {
-    return Math.pow(ratio,10);
-  } else {
-    var distance = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
-    return distance;
-  }
+
+  var distance = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
+  distance = _.round(distance, 2);
+  return conditionMesure(distance);
+
 };
 
 let transformCheckpoint = (checkpoint) => {
@@ -60,5 +74,7 @@ let run = () => {
 module.exports = {
   transformCheckpoint: transformCheckpoint,
   showCheckpoint: showCheckpoint,
+  calculateDistanceWithRssi: calculateDistanceWithRssi,
+  conditionMesure: conditionMesure,
   run: run
 };
