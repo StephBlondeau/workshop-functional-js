@@ -28,5 +28,4 @@ describe('Function transformCheckpoint', function() {
   it('Function transformCheckpoint without parameter should verify if parameter is mutated', function() {
     expect(transformCheckpoint(Point)).to.not.equal(Point);
   });
-
 });

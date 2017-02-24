@@ -35,7 +35,7 @@ let transformCheckpoint = (checkpoint) => {
     delete verifyPoint.rssi;
     delete verifyPoint.services;
     // Everything is ok
-    return true;
+    return verifyPoint;
   } else {
     return false;
   }
@@ -53,11 +53,9 @@ let showCheckpoint = (checkpoint, index) => {
 
 let run = () => {
   let checkpoints = checkpointsService.getCheckpoints();
-  for (var i = 0; i < checkpoints.length; i++) {
-    let checkpoint = checkpoints[i];
-    transformCheckpoint(checkpoint);
-    showCheckpoint(checkpoint, i);
-  }
+  checkpoints.map((checkpoint, index) => {
+    showCheckpoint(transformCheckpoint(checkpoint), index);
+  });
 };
 
 module.exports = {
