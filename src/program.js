@@ -19,18 +19,21 @@ let calculateDistanceWithRssi = rssi => {
 
 let transformCheckpoint = (checkpoint) => {
   if (checkpoint) {
+    // Définition d'un nouvelle object sans toucher au paramêtre
+    var verifyPoint = {};
+    Object.assign(verifyPoint, checkpoint);
     // Get back essential properties
-    checkpoint.serviceData = checkpoint.advertisement.serviceData;
-    checkpoint.serviceUuids = checkpoint.advertisement.serviceUuids;
+    verifyPoint.serviceData = verifyPoint.advertisement.serviceData;
+    verifyPoint.serviceUuids = verifyPoint.advertisement.serviceUuids;
     // Transform data about distance
-    checkpoint.distance = calculateDistanceWithRssi(checkpoint.rssi);
+    verifyPoint.distance = calculateDistanceWithRssi(verifyPoint.rssi);
     // Clean uninteresting properties
-    delete checkpoint.id;
-    delete checkpoint.address;
-    delete checkpoint.addressType;
-    delete checkpoint.advertisement;
-    delete checkpoint.rssi;
-    delete checkpoint.services;
+    delete verifyPoint.id;
+    delete verifyPoint.address;
+    delete verifyPoint.addressType;
+    delete verifyPoint.advertisement;
+    delete verifyPoint.rssi;
+    delete verifyPoint.services;
     // Everything is ok
     return true;
   } else {
